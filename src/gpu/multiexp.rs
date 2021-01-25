@@ -339,12 +339,12 @@ where
 
                                 // let mut jack_windows_size = 11;
 
-                                let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
+                                // let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
                                 // if size_result > 144 {
                                 //     jack_windows_size = 9;
                                 //     jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
                                 // }
-                                let mut jack_windows_size = 9;
+                                let  jack_windows_size = 10;
                                 jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
                                 
                                 
