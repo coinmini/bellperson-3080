@@ -334,14 +334,14 @@ where
                                 let mut acc = <G as CurveAffine>::Projective::zero();
                                 // let jack_chunk_3090 = 30000000;
                                 let mut jack_chunk_3090 = kern.n;
-                                let mut jack_window_size = 11;
+                                let mut jack_windows_size = 11;
                                 let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
                                 if size_result > 144 {
-                                    jack_window_size = 9;
+                                    jack_windows_size = 9;
                                     jack_chunk_3090 = (jack_chunk_3090 as f64 / 11f64).ceil() as usize;
                                 }
                                 for (bases, exps) in bases.chunks(jack_chunk_3090).zip(exps.chunks(jack_chunk_3090)) {
-                                    let result = kern.multiexp(bases, exps, bases.len(),jack_window_size)?;
+                                    let result = kern.multiexp(bases, exps, bases.len(),jack_windows_size)?;
                                     acc.add_assign(&result);
                                 }
 
