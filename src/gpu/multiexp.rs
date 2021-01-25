@@ -175,11 +175,11 @@ where
         exp_buffer.write_from(0, exps)?;
         let bucket_buffer = self
             .program
-            .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count * bucket_len)?;
+            .create_buffer::<<G as CurveAffine>::Projective>(4 * self.core_count * bucket_len)?;
             // .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count * bucket_len)?;
         let result_buffer = self
             .program
-            .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count)?;
+            .create_buffer::<<G as CurveAffine>::Projective>(4 * self.core_count)?;
             // .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count)?;
 
 
@@ -312,6 +312,7 @@ where
         let (cpu_exps, exps) = exps.split_at(cpu_n);
         // let chunk_size = 30000000;//((n as f64) / (num_devices as f64)).ceil() as usize;
         let chunk_size = ((n as f64) / (num_devices as f64)).ceil() as usize;
+        info!("originin chunk_size is -----:{}", chunk_size);
         
         crate::multicore::THREAD_POOL.install(|| {
             use rayon::prelude::*;
@@ -334,7 +335,7 @@ where
                                 let mut acc = <G as CurveAffine>::Projective::zero();
                                 // let jack_chunk_3090 = 30000000;
                                 let mut jack_chunk_3090 = kern.n;
-                                info!("kern.n numer is -----:{}", jack_chunk_3090);
+                                info!("kern.n numer for jack_chunk_3090 is -----:{}", jack_chunk_3090);
 
                                 let mut jack_windows_size = 11;
                                 let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
