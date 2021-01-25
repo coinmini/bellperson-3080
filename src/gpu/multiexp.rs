@@ -344,7 +344,7 @@ where
                                 //     jack_windows_size = 9;
                                 //     jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
                                 // }
-                                jack_windows_size = 9;
+                                let mut jack_windows_size = 9;
                                 jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
                                 
                                 
