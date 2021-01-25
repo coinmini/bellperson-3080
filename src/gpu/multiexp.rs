@@ -175,11 +175,11 @@ where
         exp_buffer.write_from(0, exps)?;
         let bucket_buffer = self
             .program
-            .create_buffer::<<G as CurveAffine>::Projective>(4 * self.core_count * bucket_len)?;
+            .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count * bucket_len)?;
             // .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count * bucket_len)?;
         let result_buffer = self
             .program
-            .create_buffer::<<G as CurveAffine>::Projective>(4 * self.core_count)?;
+            .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count)?;
             // .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count)?;
 
 
@@ -334,6 +334,8 @@ where
                                 let mut acc = <G as CurveAffine>::Projective::zero();
                                 // let jack_chunk_3090 = 30000000;
                                 let mut jack_chunk_3090 = kern.n;
+                                info!("kern.n numer is -----:{}", jack_chunk_3090.String());
+
                                 let mut jack_windows_size = 11;
                                 let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
                                 if size_result > 144 {
