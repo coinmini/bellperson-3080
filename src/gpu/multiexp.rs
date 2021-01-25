@@ -109,10 +109,11 @@ where
 
         let exp_bits = exp_size::<E>() * 8;
         let core_count = utils::get_core_count(&d);
-        // let mem = d.memory();
-        // let max_n = calc_chunk_size::<E>(mem, core_count);
-        // let best_n = calc_best_chunk_size(MAX_WINDOW_SIZE, core_count, exp_bits);
-        let n = 30000000;//std::cmp::min(max_n, best_n);
+        let mem = d.memory();
+        let max_n = calc_chunk_size::<E>(mem, core_count);
+        let best_n = calc_best_chunk_size(MAX_WINDOW_SIZE, core_count, exp_bits);
+        let n = std::cmp::min(max_n, best_n);
+        // let n = 30000000;
 
         Ok(SingleMultiexpKernel {
             program: opencl::Program::from_opencl(d, &src)?,
@@ -174,10 +175,13 @@ where
         exp_buffer.write_from(0, exps)?;
         let bucket_buffer = self
             .program
-            .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count * bucket_len)?;
+            .create_buffer::<<G as CurveAffine>::Projective>(4 * self.core_count * bucket_len)?;
+            // .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count * bucket_len)?;
         let result_buffer = self
             .program
-            .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count)?;
+            .create_buffer::<<G as CurveAffine>::Projective>(4 * self.core_count)?;
+            // .create_buffer::<<G as CurveAffine>::Projective>(2 * self.core_count)?;
+
 
         // Make global work size divisible by `LOCAL_WORK_SIZE`
         let mut global_work_size = num_windows * num_groups;
@@ -306,8 +310,9 @@ where
         let n = n - cpu_n;
         let (cpu_bases, bases) = bases.split_at(cpu_n);
         let (cpu_exps, exps) = exps.split_at(cpu_n);
-        let chunk_size = 30000000;//((n as f64) / (num_devices as f64)).ceil() as usize;
-
+        // let chunk_size = 30000000;//((n as f64) / (num_devices as f64)).ceil() as usize;
+        let chunk_size = ((n as f64) / (num_devices as f64)).ceil() as usize;
+        
         crate::multicore::THREAD_POOL.install(|| {
             use rayon::prelude::*;
 
@@ -327,11 +332,13 @@ where
                             .zip(self.kernels.par_iter_mut())
                             .map(|((bases, exps), kern)| -> Result<<G as CurveAffine>::Projective, GPUError> {
                                 let mut acc = <G as CurveAffine>::Projective::zero();
-                                let jack_chunk_3090 = 30000000;
-                                let mut jack_window_size = 11;
+                                // let jack_chunk_3090 = 30000000;
+                                let mut jack_chunk_3090 = kern.n;
+                                // let mut jack_window_size = 11;
                                 let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
                                 if size_result > 144 {
-                                    jack_window_size = 9;
+                                    // jack_window_size = 9;
+                                    jack_chunk_3090 = (jack_chunk_3090 as f64 / 11f64).ceil() as usize;
                                 }
                                 for (bases, exps) in bases.chunks(jack_chunk_3090).zip(exps.chunks(jack_chunk_3090)) {
                                     let result = kern.multiexp(bases, exps, bases.len(),jack_window_size)?;
