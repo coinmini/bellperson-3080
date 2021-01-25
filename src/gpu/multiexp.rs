@@ -337,14 +337,15 @@ where
                                 let mut jack_chunk_3090 = kern.n;
                                 info!("kern.n numer for jack_chunk_3090 is -----:{}", jack_chunk_3090);
 
-                                // let mut jack_windows_size = 11;
+                                let mut jack_windows_size = 10;
 
-                                // let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
-                                // if size_result > 144 {
-                                //     jack_windows_size = 9;
-                                //     jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
-                                // }
-                                let  jack_windows_size = 10;
+                                let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
+                                
+                                if size_result > 144 {
+                                    jack_windows_size = 9;
+                                    jack_chunk_3090 = (jack_chunk_3090 as f64 / 11f64).ceil() as usize;
+                                }
+
                                 jack_chunk_3090 = (jack_chunk_3090 as f64 / 11f64).ceil() as usize;
                                 
                                 
