@@ -334,7 +334,7 @@ where
                                 let mut acc = <G as CurveAffine>::Projective::zero();
                                 // let jack_chunk_3090 = 30000000;
                                 let mut jack_chunk_3090 = kern.n;
-                                info!("kern.n numer is -----:{}", jack_chunk_3090.String());
+                                info!("kern.n numer is -----:{}", jack_chunk_3090);
 
                                 let mut jack_windows_size = 11;
                                 let size_result = std::mem::size_of::<<G as CurveAffine>::Projective>();
