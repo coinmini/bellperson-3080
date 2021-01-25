@@ -345,7 +345,7 @@ where
                                 //     jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
                                 // }
                                 let  jack_windows_size = 10;
-                                jack_chunk_3090 = (jack_chunk_3090 as f64 / 10f64).ceil() as usize;
+                                jack_chunk_3090 = (jack_chunk_3090 as f64 / 11f64).ceil() as usize;
                                 
                                 
                                 for (bases, exps) in bases.chunks(jack_chunk_3090).zip(exps.chunks(jack_chunk_3090)) {
